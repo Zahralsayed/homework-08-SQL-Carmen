@@ -42,20 +42,20 @@ Result:
 -- to a different country, a country where people speak only the language she was learning. Find out which
 --  nearby country speaks nothing but that language.
 
-SELECT c.name
+SELECT c.name, c.code
 FROM country c
 JOIN countrylanguage cl ON c.code = cl.countrycode
-GROUP BY c.name
+GROUP BY c.name, c.code
 HAVING COUNT(*) = 1 AND MAX(cl."language") = 'Italian';
 
 Result:
--------------------------------
-             name
--------------------------------
- San Marino
- Holy See (Vatican City State)
-(2 rows)
--------------------------------
+---------------------------------------
+              name              | code
+ -------------------------------+------
+  Holy See (Vatican City State) | VAT
+  San Marino                    | SMR
+ (2 rows)
+---------------------------------------
 
 
 
@@ -64,20 +64,16 @@ Result:
  -- would be too obvious. We're following our gut on this one; find out what other city in that country she might
  --  be flying to.
 
-SELECT name
+SELECT id, name
 FROM city
-WHERE countrycode = (
-    SELECT code
-    FROM country
-    WHERE name = 'Holy See (Vatican City State)'
-)
-AND name <> 'Vatican City';
+WHERE countrycode = 'SM'
+AND name <> 'San Marino';
 
 Result:
 ----------------------
-         name
-----------------------
- Citt∩┐╜ del Vaticano
+  id  |    name
+------+------------
+ 3170 | Serravalle
 (1 row)
 ----------------------
 
@@ -86,19 +82,19 @@ Result:
 -- parts of the globe! She's headed to South America as we speak; go find a city whose name is like the one we were
 -- headed to, but doesn't end the same. Find out the city, and do another search for what country it's in. Hurry!
 
-SELECT city.name AS city_name, country.name AS country_name
-FROM city
-JOIN country ON city.countrycode = country.code
-WHERE country.continent = 'South America'
-  AND city.name ILIKE '%Citt%'
-LIMIT 1;
-
+SELECT ci.name AS city, co.name AS country
+FROM city ci
+JOIN country co ON ci.countrycode = co.code
+WHERE co.continent = 'South America'
+AND ci.name ILIKE 'Serra%'
+AND ci.name <> 'Serravalle';
 
 Result:
 --------------------------
- city_name | country_name
------------+--------------
-(0 rows)
+  city  | country
+ -------+---------
+  Serra | Brazil
+  (1 row)
 --------------------------
 
 
