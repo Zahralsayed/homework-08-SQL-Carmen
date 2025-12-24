@@ -66,7 +66,7 @@ Result:
 
 SELECT id, name
 FROM city
-WHERE countrycode = 'SM'
+WHERE countrycode = 'SMR'
 AND name <> 'San Marino';
 
 Result:
