@@ -102,6 +102,18 @@ Result:
  -- the capital! Look up the country's capital, and get there pronto! Send us the name of where you're headed and we'll
  -- follow right behind you!
 
+SELECT ci.name AS capital
+FROM country co
+JOIN city ci ON co.capital = ci.id
+WHERE co.name = 'Brazil';
+
+Result:
+-------------
+  capital
+------------
+Brasília
+(1 row)
+-------------
 
 
 -- Clue #7: She knows we're on to her – her taxi dropped her off at the international airport, and she beat us to
